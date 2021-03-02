@@ -1,6 +1,12 @@
 //  Get total cost
 const totalCostInput = document.querySelector("#total-cost-input").value;
-// console.log(totalCostInput);
+const totalNights = document.querySelector("#total-nights-for-trip").value;
+console.log("Total Cost: " + totalCostInput);
+
+
+//  List of people
+let personList = [];
+
 
 let newPayment = 0;
 let pplCounter = document.querySelector('#ppl-num');
@@ -15,6 +21,7 @@ const addPersonBtn = document.querySelector("#addPerson");
 addPersonBtn.addEventListener("click", addPerson);
 // deletePersonBtn.addEventListener("click", deletePerson);
 
+
 //  Add a person to the table
 function addPerson(event) {
 
@@ -25,79 +32,142 @@ function addPerson(event) {
     let nameInput = document.querySelector('#name-input').value;
     let nightsInput = document.querySelector('#nights-select').value;
 
-    //  Create a table row
-    const newRow = document.createElement("tr");
-    newRow.innerHTML = "<tr>" +
-        "<td>" + nameInput + "</td>" +
-        "<td>" + nightsInput + "</td>" +
-        "<td>" + calculatePayment(nightsInput) + "</td>" +
-        "</tr>";
+    let person = {
+        "name": nameInput,
+        "nights": nightsInput,
+        "payment": 0,
+        "adjustment": 0 // The adjustment to be made on the payment
+    }
 
+    // console.log(person.name, person.nights, person.payment);
 
-    //  Append person to the table
-    document.getElementById("table-body").appendChild(newRow);
+    // addToTable();
+
+    //  Add to person list
+    personList.push(person);
+    console.log(personList.length);
+    if (personList.length == 2) {
+        console.log(personList[1]);
+    }
+
+    calculatePaymentForEachPerson();
 
     //  reset the form
     document.getElementById("form-id").reset();
 
-    //  Set new payments for each person
-    setPaymentsForEachPerson();
+    updateTable();
 
 }
 
+//  Calculate the payment for each person
+function calculatePaymentForEachPerson() {
+    let nightsStaying = 0;
+    let nonAdjustmentSum = 0;
+
+    personList.forEach(person => {
+
+        nightsStaying = person.nights;
+        //  Calculate the payment based on nights stayed
+        person.payment = calculatePayment(nightsStaying);
+        nonAdjustmentSum += person.payment;
+        // console.log(person);
+
+    });
+
+    calculateAdjustment(nonAdjustmentSum);
+}
 
 //  Calculate the payment for the current row
 function calculatePayment(nightsInput) {
-    //  Set payment = 0 for now
-    let payment = 0;
 
-    let numberOfPPl = document.querySelectorAll('#paymentTable tr').length;
-    console.log(numberOfPPl);
+    let perNight = 0;
+    let noAdjustmentPayment = 0;
+
+    //  Get the number of people
+    let numberOfPPl = personList.length;
 
     //  Set the number of ppl
     pplCounter.value = numberOfPPl;
 
+    //  Divide the total cost input by the amount of ppl, divide tthat by total nights to get the per night cost
+    //  Get the per night cost
+    perNight = (totalCostInput / numberOfPPl) / totalNights;
+    // console.log(perNight);
 
-    //  Divide the total cost input by the amount of ppl
-    payment = totalCostInput / numberOfPPl;
+    //  Without the adjustment the cost is the perNight * the users selected stay length
+    noAdjustmentPayment = perNight * nightsInput;
 
-    //  Calculate adjustment
-    console.log("Nights input: " + nightsInput);
-
-
-    //  Set the new payment
-    newPayment = payment.toFixed(2);
+    //  Round up for money
+    noAdjustmentPayment = Math.ceil(noAdjustmentPayment * 100) / 100;
 
     //  Return the calculated payment
-    return payment.toFixed(2);
+    return noAdjustmentPayment;
+}
+
+function calculateAdjustment(nonAdjustmentSum) {
+
+    let adjustmentTotal = totalCostInput - nonAdjustmentSum;
+    // console.log("Adjustment Total: " + adjustmentTotal);
+    let adjustmentPerPerson = adjustmentTotal / personList.length;
+
+    personList.forEach(person => {
+        person.adjustment = adjustmentPerPerson.toFixed(2);
+
+        console.log(person);
+    });
 }
 
 
-//  This function sets the payments for each person in the table, so the adjustments when someone new is added
-function setPaymentsForEachPerson(tableLength) {
-    let tbl = document.getElementById("table-body");
-    //  Get the third td col
-    let targetTDs = tbl.querySelectorAll('tr > td:nth-child(3)');
+function updateTable() {
 
-    for (var i = 0; i < targetTDs.length; i++) {
-        // let newPayment = targetTDs[i];
-        //  This outputs the payment cost
-        targetTDs[i].innerHTML = newPayment;
+    let tableBody = document.getElementById('table-body');
+
+    //  if the personList.length is != to the tableRows.length
+    //  if rows == 0 we need to add a row
+    let howManyPpl = personList.length;
+    let howManyRows = tableBody.rows.length;
+
+    //  If there are no rows we need to add a person to the table
+    if (howManyRows == 0) {
+
+        appendNewRow(howManyPpl);
+
+    } else {
+
+        // For each row in the table update the payment
+        for (var i = 0; i < howManyRows; i++) {
+            console.log("current row: " + i);
+            let pymnt = (+personList[i].payment + +personList[i].adjustment).toFixed(2);
+            // console.log("pymnt: "  + pymnt);
+            tableBody.rows[i].cells[2].innerHTML = pymnt;
+        }
+
+        //  Add the new person to the table
+        appendNewRow(howManyPpl);
 
     }
-
 }
 
-function calculateCorrectCostWithAdjustment(){
-    //  Need the totalCost of the trip
+function appendNewRow(howManyPpl) {
 
-    //  Need to calculate the perNight cost
-    // let perNightCost = totalCost /
+    //  Get the correct index for the last person in the personList to add to table
+    let personToAdd = howManyPpl - 1;
 
-    //  Need to calculate the noAdjustment total
+    let payment =(+personList[personToAdd].payment + +personList[personToAdd].adjustment).toFixed(2);
+    console.log("payment:>>>>" + payment);
 
-    //  subtract the totalCost from the noAdjustmentTotal
 
-    //  Divide the adjustment by number of people to ge the adjusted cost per person
+    //  Create a new row
+    const newRow = document.createElement("tr");
+    newRow.innerHTML = "<tr>" +
+        "<td>" + personList[personToAdd].name + "</td>" +
+        "<td>" + personList[personToAdd].nights + "</td>" +
+        "<td>" + payment + "</td>" +
+        "</tr>";
 
+    //  Append person to the table
+    document.getElementById("table-body").appendChild(newRow);
 }
+
+// TODO Need to be able to edit and delete
+//  TODO NEED to persist data
