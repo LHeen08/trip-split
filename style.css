@@ -1,7 +1,7 @@
-html{
-    height:100%;
+html {
+  height: 100%;
 }
-body {
+/* body {
   background: rgb(34, 193, 195);
   background: linear-gradient(
     0deg,
@@ -12,7 +12,7 @@ body {
   margin: 0;
   background-repeat: no-repeat;
   background-attachment: fixed;
-}
+} */
 input#total-cost-input {
   padding: 10px;
   font: 20px Arial;
@@ -32,14 +32,34 @@ select {
   padding: 3px;
 }
 
-div#title-area {
-    margin: auto;
-  /* margin-top: 20px; */
+/* div#title-area {
+  /* background-color: #add8e6; */
+
+/* display: block; */
+/* margin: center; */
+/* margin: auto; */
+/* margin-top: 20px; */
+/* } */
+
+div#top-portion {
+  background-color: #add8e6;
+  overflow: hidden;
 }
 
 div#cost-input {
   margin-top: 25px;
+}
 
+input#nights-select {
+  width: 50px;
+}
+
+div#nights-select-col {
+  float: inline-start;
+}
+
+input#modal-nights-input {
+  width: 50px;
 }
 
 .form-row {
@@ -58,9 +78,9 @@ input#ppl-num {
   width: 75px;
 }
 
-input#total-nights-for-trip{
-    align-items: right;
-    width: 75px;
+input#total-nights-for-trip {
+  align-items: right;
+  width: 75px;
 }
 
 input::-webkit-outer-spin-button,

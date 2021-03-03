@@ -2,16 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trip Calculator</title>
 
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
@@ -22,29 +21,31 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
     <!-- Title -->
     <div class="container">
-        <div id="title-area" style="justify-content: center">
-            <div>
-                <h1>Trip Calculator</h1>
+        <div id="top-portion">
+            <div id="title-area" class="text-center">
+                <div>
+                    <h1>Trip Calculator</h1>
+                </div>
+                <div>
+                    <p>
+                        Calculator to easily split trip cost and see payments per person
+                    </p>
+                </div>
             </div>
-            <div>
-                <p>Calculator to easily split trip cost and see payments per person</p>
+            <!-- Cost input -->
+            <div id="cost-input" class="text-center">
+                <label for="totalCost">Total Cost of trip:</label>
+                <input id="total-cost-input" type="number" min="0.00" max="100000.00" step="0.01" />
+                <label for="total-nights-for-trip"> Total nights:</label>
+                <input id="total-nights-for-trip" type="number" min="0" max="365" step="1" />
             </div>
         </div>
-        <!-- Cost input -->
-        <div id="cost-input" class="text-center">
-            <label for="totalCost">Total Cost of trip:</label>
-            <input id="total-cost-input" type="number" min="0.00" max="100000.00" step="0.01" />
-            <label for="total-nights-for-trip"> Total nights:</label>
-            <input id="total-nights-for-trip" type="number" min="0" max="365" step="1">
-        </div>
-
-
 
         <!-- Form to enter name and nights -->
         <hr />
@@ -52,26 +53,22 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="name-input">Name:</label>
-                    <input id="name-input" type="text" class="todo-input" />
+                    <input id="name-input" type="text" />
+                    <p id="name-invalid"></p>
                 </div>
 
-                <div class="form-group col-md-2">
+                <div id="nights-select-col" class="form-group col-sm-4">
                     <label for="nights-select">Nights:</label>
-                    <select id="nights-select" type="number" name='nights'>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+                    <input id="nights-select" type="number" />
+                    <p id="number-invalid"></p>
                 </div>
                 <div class="form-group col-md-4">
-                    <button id="addPerson" value="submit" class="float-right btn btn-success" type="button">Add
-                        Person</button>
+                    <button id="addPerson" value="submit" class="float-right btn btn-success" type="button">
+                        Add Person
+                    </button>
                 </div>
             </div>
         </form>
-
 
         <!-- Payments table -->
         <hr />
@@ -79,23 +76,69 @@
             <h2>Payments</h2>
             <div>
                 <label id="ppl-label" for="numOfppl">Number of People: </label>
-                <input id="ppl-num" type="number" disabled='true' />
+                <input id="ppl-num" type="number" disabled="true" />
             </div>
         </div>
         <div>
             <table id="paymentTable" class="table table-condensed">
                 <thead>
                     <tr>
-                        <th class="text-center">Name</th>
-                        <th class="text-center">Nights</th>
-                        <th class="text-center">Payment</th>
+                        <th class="col-sm-4 text-center">Name</th>
+                        <th class="col-sm-2 text-center">Nights</th>
+                        <th class="col-sm-4 text-center">Payment</th>
+                        <th class="col-sm-2 text-center"></th>
                     </tr>
                 </thead>
                 <tbody id="table-body" class="text-center"></tbody>
             </table>
         </div>
 
-    </div>
+        <!-- Modal for table -->
+        <!-- Button trigger modal -->
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRowModal">
+            Launch demo modal
+        </button> -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Person</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label>Name:</label>
+                                <input id="modal-name-input" type="text" />
+                                <p id="modal-name-invalid"></p>
+
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Nights:</label><br />
+                                <input id="modal-nights-input" type="number" />
+                                <p id="modal-number-invalid"></p>
+
+                            </div>
+                        </div><br />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button id="save-edit" type="button" class="float-right btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
 </body>
 
 <script type="text/javascript" src="app.js"></script>
