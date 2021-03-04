@@ -1,3 +1,13 @@
+
+body{
+background-color: #8EC5FC;
+background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
+
+/* background-color: #74EBD5;
+background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%); */
+
+}
+
 html {
   height: 100%;
 }
@@ -16,14 +26,7 @@ div#input-cols {
   margin-top: 25px;
 }
 
-/* form {
-  margin: 5px;
-} */
 
-div#top-portion {
-  background-color: #add8e6;
-  overflow: hidden;
-}
 
 /* input#nights-select {
   width: 50px;
@@ -50,6 +53,9 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+table label {
+  font-weight: bold;
+}
 
 .payments-group {
   padding-top: 20px;
