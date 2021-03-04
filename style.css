@@ -1,37 +1,15 @@
+body {
+  background-color: #8ec5fc;
+  background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+  font-family: "Noto Sans JP", sans-serif;
 
-body{
-background-color: #8EC5FC;
-background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
-
-/* background-color: #74EBD5;
+  /* background-color: #74EBD5;
 background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%); */
-
 }
 
 html {
   height: 100%;
 }
-
-input#total-cost-input {
-  width: 50%;
-  margin-bottom: 50px;
-}
-
-input#total-nights-for-trip {
-  width: 15%;
-  text-align: center;
-}
-
-div#input-cols {
-  margin-top: 25px;
-}
-
-
-
-/* input#nights-select {
-  width: 50px;
-
-} */
 
 input#modal-nights-input {
   width: 50px;
@@ -53,13 +31,16 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-table label {
-  font-weight: bold;
+form#form-id {
+  padding-top: 15px;
+}
+
+div#top-portion {
+  padding-top: 10px;
 }
 
 .payments-group {
-  padding-top: 20px;
-  margin: 10px;
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

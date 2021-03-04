@@ -12,33 +12,53 @@ pplCounter.value = 0;
 //  Add a person button
 const addPersonBtn = document.querySelector("#addPerson");
 
+
 //  Want to add delete trash can in table
 // const deletePersonBtn = document.querySelector("#deletePerson");
 
 //  Event listeners
 addPersonBtn.addEventListener("click", addPerson);
 
-document.getElementById("total-cost-input").onchange = function(){
+//  Handle enter button for input
+document.getElementById("name-input").addEventListener("keyup", function (event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        addPersonBtn.click();
+    }
+});
+
+document.getElementById("nights-select").addEventListener("keyup", function (event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        addPersonBtn.click();
+    }
+});
+
+
+//  Handle on change of total cost
+document.getElementById("total-cost-input").onchange = function () {
     console.log("Cost changed...");
     totalCostInput = document.getElementById("total-cost-input").value;
     updateTable();
 };
 
+
+//  TODO need to decide if i want to be able to change the total nights for the trip
+//  Problems- tablenights for each person will not be updated
 document.getElementById("total-nights-for-trip").onchange = function () {
     totalNights = document.getElementById("total-nights-for-trip").value;
     document.getElementById("total-nights-for-trip").disabled = true;
 };
 
-
-
 //  Add a person to the table
 function addPerson() {
-    //  Prevent form from submitting
-    // event.preventDefault();
     if (validateInput("Input")) {
         //  get the name and night values from the form
-        let nameInput = document.querySelector("#name-input").value;
-        let nightsInput = document.querySelector("#nights-select").value;
+        let nameInput = document.getElementById("name-input").value;
+        let nightsInput = document.getElementById("nights-select").value;
+
+        //  Capitalize name
+        nameInput = nameInput.charAt(0).toUpperCase() + nameInput.slice(1);
 
         let person = {
             name: nameInput,
@@ -83,7 +103,7 @@ function calculatePayment(nightsInput) {
 
     //  Divide the total cost input by the amount of ppl, divide tthat by total nights to get the per night cost
     //  Get the per night cost
-    perNight = (totalCostInput / numberOfPPl) / totalNights;
+    perNight = totalCostInput / numberOfPPl / totalNights;
     // console.log(perNight);
 
     //  Without the adjustment the cost is the perNight * the users selected stay length
@@ -165,17 +185,17 @@ function appendNewRow(howManyPpl) {
     const newRow = document.createElement("tr");
     newRow.innerHTML =
         "<tr class='d-flex'>" +
-        "<td class='col-sm-4'>" +
+        "<td class='col-sm-4 align-middle'>" +
         personList[personToAdd].name +
         "</td>" +
-        "<td class='col-sm-2'>" +
+        "<td class='col-sm-2 align-middle'>" +
         personList[personToAdd].nights +
         "</td>" +
-        "<td class='col-sm-4'>" +
+        "<td class='col-sm-4 align-middle'>" +
         payment +
         "</td>" +
-        "<td class='col-sm-2'>" +
-        "<button class='btn' onclick='editRow(this)'><i class='bi bi-pen-fill'></i></button>" +
+        "<td class='col-sm-2 align-middle'>" +
+        "<button class='btn mr-5' onclick='editRow(this)'><i class='bi bi-pen-fill'></i></button>" +
         "<button class='btn' onclick='deletePerson(this);'><i class='bi bi-trash-fill'></i></button>" +
         "</td>" +
         "</tr>";
@@ -306,7 +326,6 @@ function validateInput(inputOrEdit) {
 //  TODO Need a reset table button
 //  TODO Need to implement export to excel, JSON, csv
 //  TODO implement a late addition feature
-//  TODO validate the intial inputs
 
 //  FIXME fix formatting
-//  FIXME fixformatting for validation
+//  FIXME on chrome the initial inputsare different than name and nights boxes
