@@ -1,86 +1,42 @@
 html {
   height: 100%;
 }
-/* body {
-  background: rgb(34, 193, 195);
-  background: linear-gradient(
-    0deg,
-    rgba(34, 193, 195, 1) 0%,
-    rgba(253, 187, 45, 1) 100%
-  );
-  height: 100%;
-  margin: 0;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-} */
+
 input#total-cost-input {
-  padding: 10px;
-  font: 20px Arial;
-  width: 20%;
+  width: 50%;
   margin-bottom: 50px;
 }
 
-form {
+input#total-nights-for-trip {
+  width: 15%;
+  text-align: center;
+}
+
+div#input-cols {
+  margin-top: 25px;
+}
+
+/* form {
   margin: 5px;
-}
-
-input#name-input {
-  padding: 3px;
-}
-
-select {
-  padding: 3px;
-}
-
-/* div#title-area {
-  /* background-color: #add8e6; */
-
-/* display: block; */
-/* margin: center; */
-/* margin: auto; */
-/* margin-top: 20px; */
-/* } */
+} */
 
 div#top-portion {
   background-color: #add8e6;
   overflow: hidden;
 }
 
-div#cost-input {
-  margin-top: 25px;
-}
-
-input#nights-select {
+/* input#nights-select {
   width: 50px;
-}
 
-div#nights-select-col {
-  float: inline-start;
-}
+} */
 
 input#modal-nights-input {
   width: 50px;
 }
 
-.form-row {
-  justify-content: space-around;
-}
-
-.payments-group {
-  padding-top: 20px;
-  margin: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
 input#ppl-num {
-  align-items: center;
-  width: 75px;
-}
-
-input#total-nights-for-trip {
-  align-items: right;
-  width: 75px;
+  text-align: center;
+  width: 50px;
 }
 
 input::-webkit-outer-spin-button,
@@ -92,4 +48,13 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+
+.payments-group {
+  padding-top: 20px;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

@@ -39,36 +39,41 @@
                 </div>
             </div>
             <!-- Cost input -->
-            <div id="cost-input" class="text-center">
-                <label for="totalCost">Total Cost of trip:</label>
-                <input id="total-cost-input" type="number" min="0.00" max="100000.00" step="0.01" />
-                <label for="total-nights-for-trip"> Total nights:</label>
-                <input id="total-nights-for-trip" type="number" min="0" max="365" step="1" />
+            <div id="input-cols" class="row justify-content-center">
+                <div id="cost-input-col" class="col-auto">
+                    <label for="totalCost">Total Cost of trip:</label>
+                    <input id="total-cost-input" type="number" min="0.00" max="100000.00" step="0.01" />
+                </div>
+                <div class="col-auto">
+                    <label for="total-nights-for-trip"> Total nights:</label>
+                    <input id="total-nights-for-trip" type="number" min="0" max="365" step="1" />
+                </div>
             </div>
         </div>
 
         <!-- Form to enter name and nights -->
         <hr />
-        <form id="form-id">
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="name-input">Name:</label>
-                    <input id="name-input" type="text" />
-                    <p id="name-invalid"></p>
-                </div>
+        <form id="form-id" class="form-inline justify-content-center">
+            <!-- <div class="row h-100 justify-content-center align-items-center"> -->
 
-                <div id="nights-select-col" class="form-group col-sm-4">
-                    <label for="nights-select">Nights:</label>
-                    <input id="nights-select" type="number" />
-                    <p id="number-invalid"></p>
-                </div>
-                <div class="form-group col-md-4">
-                    <button id="addPerson" value="submit" class="float-right btn btn-success" type="button">
-                        Add Person
-                    </button>
-                </div>
+            <div class="form-group">
+                <input id="name-input" class="form-control mb-2 mr-sm-2 mb-sm-0" type="text" placeholder="Name" />
+                <p id="name-invalid"></p>
             </div>
+
+            <div class="form-group">
+                <input id="nights-select" class="form-control w-50 mb-2 mr-sm-2 mb-sm-0" type="number"
+                    placeholder="Nights" />
+                <p id="number-invalid"></p>
+            </div>
+            <div class="form-group">
+                <button id="addPerson" value="submit" class="btn btn-success " type="button">
+                    Add Person
+                </button>
+            </div>
+            <!-- </div> -->
         </form>
+
 
         <!-- Payments table -->
         <hr />
@@ -92,12 +97,6 @@
                 <tbody id="table-body" class="text-center"></tbody>
             </table>
         </div>
-
-        <!-- Modal for table -->
-        <!-- Button trigger modal -->
-        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editRowModal">
-            Launch demo modal
-        </button> -->
 
         <!-- Modal -->
         <div class="modal fade" id="editRowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -130,7 +129,8 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                             <div class="col-md-6">
-                                <button id="save-edit" type="button" class="float-right btn btn-primary">Save changes</button>
+                                <button id="save-edit" type="button" class="float-right btn btn-primary">Save
+                                    changes</button>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 //  Get total cost
-const totalCostInput = document.querySelector("#total-cost-input").value;
-const totalNights = document.querySelector("#total-nights-for-trip").value;
+let totalCostInput = document.querySelector("#total-cost-input").value;
+let totalNights = document.querySelector("#total-nights-for-trip").value;
 
 //  List of people
 let personList = [];
@@ -17,7 +17,19 @@ const addPersonBtn = document.querySelector("#addPerson");
 
 //  Event listeners
 addPersonBtn.addEventListener("click", addPerson);
-// deletePersonBtn.addEventListener("click", deletePerson);
+
+document.getElementById("total-cost-input").onchange = function(){
+    console.log("Cost changed...");
+    totalCostInput = document.getElementById("total-cost-input").value;
+    updateTable();
+};
+
+document.getElementById("total-nights-for-trip").onchange = function () {
+    totalNights = document.getElementById("total-nights-for-trip").value;
+    document.getElementById("total-nights-for-trip").disabled = true;
+};
+
+
 
 //  Add a person to the table
 function addPerson() {
@@ -37,10 +49,6 @@ function addPerson() {
 
         //  Add to person list
         personList.push(person);
-        // console.log(personList.length);
-        if (personList.length === 2) {
-            // console.log(personList[1]);
-        }
 
         //  reset the form
         document.getElementById("form-id").reset();
@@ -75,7 +83,7 @@ function calculatePayment(nightsInput) {
 
     //  Divide the total cost input by the amount of ppl, divide tthat by total nights to get the per night cost
     //  Get the per night cost
-    perNight = totalCostInput / numberOfPPl / totalNights;
+    perNight = (totalCostInput / numberOfPPl) / totalNights;
     // console.log(perNight);
 
     //  Without the adjustment the cost is the perNight * the users selected stay length
@@ -233,6 +241,8 @@ function validateInput(inputOrEdit) {
     var validName, validNights;
     var nameText, nightText;
 
+    console.log(totalNights);
+
     if (inputOrEdit === "Input") {
         // Validate the input and change those elements in DOM
         var name = document.getElementById("name-input").value;
@@ -296,6 +306,7 @@ function validateInput(inputOrEdit) {
 //  TODO Need a reset table button
 //  TODO Need to implement export to excel, JSON, csv
 //  TODO implement a late addition feature
+//  TODO validate the intial inputs
 
-//  FIXME Need a submit button for the total cost and night input
 //  FIXME fix formatting
+//  FIXME fixformatting for validation
