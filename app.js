@@ -42,7 +42,20 @@ document.getElementById("nights-select").addEventListener("keyup", function (eve
 document.getElementById("total-cost-input").onchange = function () {
     // console.log("Cost changed...");
     totalCostInput = document.getElementById("total-cost-input").value;
-    updateTable();
+
+    let costText = "";
+
+
+
+    //  Validate the input 
+    if (validateTotalCost(totalCostInput)) {
+        costText = "";
+        document.getElementById("cost-invalid").innerHTML = costText;
+        updateTable();
+    } else {
+        costText = "Cost invalid"
+        document.getElementById("cost-invalid").innerHTML = costText;
+    }
 };
 
 
@@ -61,7 +74,10 @@ function addPerson() {
         let nightsInput = document.getElementById("nights-select").value;
 
         //  Capitalize name
-        nameInput = nameInput.charAt(0).toUpperCase() + nameInput.slice(1);
+        // nameInput = nameInput.charAt(0).toUpperCase() + nameInput.slice(1);
+        nameInput = nameInput.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
 
         let person = {
             name: nameInput,
@@ -119,6 +135,7 @@ function calculatePayment(nightsInput) {
     return noAdjustmentPayment;
 }
 
+//  Calculate the adjustment
 function calculateAdjustment(nonAdjustmentSum) {
     let adjustmentTotal = totalCostInput - nonAdjustmentSum;
     // console.log("Adjustment Total: " + adjustmentTotal);
@@ -131,6 +148,7 @@ function calculateAdjustment(nonAdjustmentSum) {
     });
 }
 
+//  Update the table with new array values
 function updateTable() {
     let tableBody = document.getElementById("table-body");
 
@@ -180,12 +198,13 @@ function updateTable() {
 
 }
 
+//  Append a new row to the table
 function appendNewRow(howManyPpl) {
     //  Get the correct index for the last person in the personList to add to table
     let personToAdd = howManyPpl - 1;
 
     let payment = (
-       +personList[personToAdd].payment + +personList[personToAdd].adjustment
+        +personList[personToAdd].payment + +personList[personToAdd].adjustment
     ).toFixed(2);
     // console.log("payment:>>>>" + payment);
 
@@ -200,7 +219,7 @@ function appendNewRow(howManyPpl) {
         personList[personToAdd].nights +
         "</td>" +
         "<td class='w-25 align-middle'>" +
-        '$ '+ payment +
+        '$ ' + payment +
         "</td>" +
         "<td class='w-25 align-middle'>" +
         "<button class='btn mr-5' onclick='editRow(this)'><i class='bi bi-pen-fill'></i></button>" +
@@ -285,6 +304,7 @@ function deletePerson(row) {
     updateTable();
 }
 
+//  Validate the input of the {addPerson, modalEdit} forms
 function validateInput(inputOrEdit) {
     let inputValid = false;
     let validName, validNights;
@@ -296,8 +316,8 @@ function validateInput(inputOrEdit) {
         // Validate the input and change those elements in DOM
         let name = document.getElementById("name-input").value;
         let nights = parseInt(document.getElementById("nights-select").value);
-        if (!name) {
-            nameText = "Please enter a name";
+        if (!name || !allLetterInput(name)) {
+            nameText = "Please enter a valid name";
             validName = false;
         } else {
             nameText = "";
@@ -352,6 +372,7 @@ function validateInput(inputOrEdit) {
     return inputValid;
 }
 
+//  Export table to csv file
 function exportTable() {
 
     //  Array to hold output values ( this is just to be able to calculate the payments and not show the adjustments...)
@@ -383,19 +404,35 @@ function exportTable() {
     document.body.appendChild(link)
     document.querySelector('#download-csv').click()
 
-    // console.log(csvContent);
+}
 
-    //  Add a button that can export to JSON, CSV
+//  Validate name is all letters (allowing punctuation)
+function allLetterInput(inputText) {
+    let letters = /^(\w+\s)*\w.+$/;
 
+    if (inputText.match(letters)) {
+        return true;
+    } else {
+        return false;
+    }
 
+}
+
+//  Function validate total cost input
+function validateTotalCost(total) {
+    if (total.match(/^\d+(\.\d{1,2})?$/)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
 //  TODO Need a reset table button
 //  TODO implement a late addition feature
-//  TODO Validation for letters only with name
-//  TODO Validation with initial inputs
 //  TODO persist data with JSON file
 // TODO see if i can use background colors for buttons. dont forget modal
+//  TODO to change the nights we can make it so when the nights are change it gets the difference from the max nights and subtracts from each
+//  Will need to handle when the nights for a person hits 0
 
-//  FIXME fix formatting
+//  FIXME fix formatting ... ongoing
