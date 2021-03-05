@@ -45,8 +45,6 @@ document.getElementById("total-cost-input").onchange = function () {
 
     let costText = "";
 
-
-
     //  Validate the input 
     if (validateTotalCost(totalCostInput)) {
         costText = "";
@@ -97,6 +95,19 @@ function addPerson() {
 }
 
 //  Calculate the payment for each person
+/*  
+    So each person has there nights staying out of the total nights
+    The person.payment is then calculated by getting the perNight payment of the trip (without and adjustment)
+    Then we add to the nonAdjustmentSum which is the sum of everyone in the groups payment
+
+    With the non adjustment sum we then divide that by the number of people going and add that to each persons final payment
+    This ensures everyone pays an equal amount based on their nights that they are staying and the whole cost
+    of the trip is covered
+
+    Bc if we just added everyones nonAdjustedPayment with differing lengths of stay the total 
+    would come up short to the cost of the trip
+
+*/
 function calculatePaymentForEachPerson() {
     let nightsStaying = 0;
     let nonAdjustmentSum = 0;
@@ -275,7 +286,9 @@ function editRow(row) {
         if (validateInput("Edit")) {
 
             // Capitalize name
-            name.value = name.value.charAt(0).toUpperCase() + name.value.slice(1);
+            name.value = name.value.replace(/\w\S*/g, function (txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
 
             personList[personIndex].name = name.value;
             personList[personIndex].nights = nights.value;
@@ -428,9 +441,28 @@ function validateTotalCost(total) {
 }
 
 
-//  TODO Need a reset table button
 //  TODO implement a late addition feature
+//  If i get the payments already set for everyone but someone wants to get added late
+//  If we have a total payment of 1000
+//  5 nights
+//  
+
+
 //  TODO persist data with JSON file
+//  This could definitely create some issues
+//  Import to table from csv
+function importCSV(){
+    //  Import button that imports a file
+
+    //  Add the csv values to the person list
+
+    
+
+}
+
+
+
+//  TODO Need a reset table button
 // TODO see if i can use background colors for buttons. dont forget modal
 //  TODO to change the nights we can make it so when the nights are change it gets the difference from the max nights and subtracts from each
 //  Will need to handle when the nights for a person hits 0
