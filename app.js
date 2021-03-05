@@ -185,16 +185,16 @@ function appendNewRow(howManyPpl) {
     const newRow = document.createElement("tr");
     newRow.innerHTML =
         "<tr class='d-flex'>" +
-        "<td class='col-sm-4 align-middle'>" +
+        "<td class='w-25 align-middle'>" +
         personList[personToAdd].name +
         "</td>" +
-        "<td class='col-sm-2 align-middle'>" +
+        "<td class='w-25 align-middle'>" +
         personList[personToAdd].nights +
         "</td>" +
-        "<td class='col-sm-4 align-middle'>" +
+        "<td class='w-25 align-middle'>" +
         payment +
         "</td>" +
-        "<td class='col-sm-2 align-middle'>" +
+        "<td class='w-25 align-middle'>" +
         "<button class='btn mr-5' onclick='editRow(this)'><i class='bi bi-pen-fill'></i></button>" +
         "<button class='btn' onclick='deletePerson(this);'><i class='bi bi-trash-fill'></i></button>" +
         "</td>" +
@@ -227,6 +227,10 @@ function editRow(row) {
     // Save changes on button press
     document.getElementById("save-edit").onclick = function () {
         if (validateInput("Edit")) {
+
+            // Capitalize name
+            name.value = name.value.charAt(0).toUpperCase() + name.value.slice(1);
+
             personList[personIndex].name = name.value;
             personList[personIndex].nights = nights.value;
 
@@ -326,6 +330,8 @@ function validateInput(inputOrEdit) {
 //  TODO Need a reset table button
 //  TODO Need to implement export to excel, JSON, csv
 //  TODO implement a late addition feature
+//  TODO Validation for letters only with name
+//  TODO Validation with initial inputs
+//  TODO persist data with JSON file
 
 //  FIXME fix formatting
-//  FIXME on chrome the initial inputsare different than name and nights boxes
