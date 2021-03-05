@@ -10,7 +10,8 @@ let pplCounter = document.querySelector("#ppl-num");
 pplCounter.value = 0;
 
 //  Add a person button
-const addPersonBtn = document.querySelector("#addPerson");
+const addPersonBtn = document.querySelector("#add-person");
+const exportBtn = document.querySelector("#export-btn")
 
 
 //  Want to add delete trash can in table
@@ -18,18 +19,20 @@ const addPersonBtn = document.querySelector("#addPerson");
 
 //  Event listeners
 addPersonBtn.addEventListener("click", addPerson);
+exportBtn.addEventListener("click", exportTable);
+
 
 //  Handle enter button for input
 document.getElementById("name-input").addEventListener("keyup", function (event) {
     event.preventDefault();
-    if (event.keyCode === 13) {
+    if (event.key === "Enter") {
         addPersonBtn.click();
     }
 });
 
 document.getElementById("nights-select").addEventListener("keyup", function (event) {
     event.preventDefault();
-    if (event.keyCode === 13) {
+    if (event.key === "Enter") {
         addPersonBtn.click();
     }
 });
@@ -37,7 +40,7 @@ document.getElementById("nights-select").addEventListener("keyup", function (eve
 
 //  Handle on change of total cost
 document.getElementById("total-cost-input").onchange = function () {
-    console.log("Cost changed...");
+    // console.log("Cost changed...");
     totalCostInput = document.getElementById("total-cost-input").value;
     updateTable();
 };
@@ -147,7 +150,7 @@ function updateTable() {
         appendNewRow(howManyPpl);
     } else {
         // For each row in the table update the payment
-        for (var i = 0; i < howManyRows; i++) {
+        for (let i = 0; i < howManyRows; i++) {
             //  Update name and nights as well
             tableBody.rows[i].cells[0].innerHTML = personList[i].name;
             tableBody.rows[i].cells[1].innerHTML = personList[i].nights;
@@ -157,7 +160,7 @@ function updateTable() {
                 2
             );
             // console.log("pymnt: "  + pymnt);
-            tableBody.rows[i].cells[2].innerHTML = pymnt;
+            tableBody.rows[i].cells[2].innerHTML = '$ ' + pymnt;
             // console.log("Updating rows..")
         }
 
@@ -168,8 +171,13 @@ function updateTable() {
         }
     }
 
-    // howManyRows = tableBody.rows.length;
-    // console.log("PersonList length: " + howManyPpl + "\nTable rows: " + howManyRows);
+    //  If there are rows in the table we should add a button that allow the user to export to JSON, csv ...
+    if (pplCounter.value > 0) {
+        document.getElementById("export-btn").style.display = "block";
+    } else {
+        document.getElementById("export-btn").style.display = "none";
+    }
+
 }
 
 function appendNewRow(howManyPpl) {
@@ -177,7 +185,7 @@ function appendNewRow(howManyPpl) {
     let personToAdd = howManyPpl - 1;
 
     let payment = (
-        +personList[personToAdd].payment + +personList[personToAdd].adjustment
+       +personList[personToAdd].payment + +personList[personToAdd].adjustment
     ).toFixed(2);
     // console.log("payment:>>>>" + payment);
 
@@ -192,7 +200,7 @@ function appendNewRow(howManyPpl) {
         personList[personToAdd].nights +
         "</td>" +
         "<td class='w-25 align-middle'>" +
-        payment +
+        '$ '+ payment +
         "</td>" +
         "<td class='w-25 align-middle'>" +
         "<button class='btn mr-5' onclick='editRow(this)'><i class='bi bi-pen-fill'></i></button>" +
@@ -209,23 +217,42 @@ function editRow(row) {
     //  Get modal from document body
     //  Fill the modal body with correct data from selected row.
     //  Save changes and update the table based on row index
-    var rowToEdit = row.parentNode.parentNode.rowIndex;
+    let rowToEdit = row.parentNode.parentNode.rowIndex;
 
     let personIndex = rowToEdit - 1;
 
-    console.log("Row to edit: " + rowToEdit);
+    // console.log("Row to edit: " + rowToEdit);
     $("#editRowModal").modal();
 
     //  When the modal is opened i need to populate the modal with values from personList at rowIndex -1
-    var name = document.getElementById("modal-name-input");
-    var nights = document.getElementById("modal-nights-input");
+    let name = document.getElementById("modal-name-input");
+    let nights = document.getElementById("modal-nights-input");
+
+    let saveBtn = document.getElementById("save-edit");
 
     //  Set the name placeholder to the current name in person list
     name.value = personList[personIndex].name;
     nights.value = personList[personIndex].nights;
 
+
+    //  Handle enter button
+    name.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.key === "Enter") {
+            saveBtn.click();
+        }
+    });
+
+    nights.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.key === "Enter") {
+            saveBtn.click();
+        }
+    });
+
+
     // Save changes on button press
-    document.getElementById("save-edit").onclick = function () {
+    saveBtn.onclick = function () {
         if (validateInput("Edit")) {
 
             // Capitalize name
@@ -233,8 +260,6 @@ function editRow(row) {
 
             personList[personIndex].name = name.value;
             personList[personIndex].nights = nights.value;
-
-            // console.log("PersonList: " + "Name: " + personList[0].name + "Nights: " + personList[0].nights);
 
             updateTable();
 
@@ -245,7 +270,7 @@ function editRow(row) {
 
 //  Delete a person
 function deletePerson(row) {
-    var index = row.parentNode.parentNode.rowIndex;
+    let index = row.parentNode.parentNode.rowIndex;
 
     document
         .getElementById("paymentTable")
@@ -261,16 +286,16 @@ function deletePerson(row) {
 }
 
 function validateInput(inputOrEdit) {
-    var inputValid = false;
-    var validName, validNights;
-    var nameText, nightText;
+    let inputValid = false;
+    let validName, validNights;
+    let nameText, nightText;
 
-    console.log(totalNights);
+    // console.log(totalNights);
 
     if (inputOrEdit === "Input") {
         // Validate the input and change those elements in DOM
-        var name = document.getElementById("name-input").value;
-        var nights = parseInt(document.getElementById("nights-select").value);
+        let name = document.getElementById("name-input").value;
+        let nights = parseInt(document.getElementById("nights-select").value);
         if (!name) {
             nameText = "Please enter a name";
             validName = false;
@@ -295,8 +320,8 @@ function validateInput(inputOrEdit) {
         document.getElementById("number-invalid").innerHTML = nightText;
     } else if (inputOrEdit === "Edit") {
         // Validate the input and change those elements in DOM
-        var name = document.getElementById("modal-name-input").value;
-        var nights = parseInt(document.getElementById("modal-nights-input").value);
+        let name = document.getElementById("modal-name-input").value;
+        let nights = parseInt(document.getElementById("modal-nights-input").value);
 
         // TODO make name not huge like 40 chars or something
 
@@ -327,11 +352,50 @@ function validateInput(inputOrEdit) {
     return inputValid;
 }
 
+function exportTable() {
+
+    //  Array to hold output values ( this is just to be able to calculate the payments and not show the adjustments...)
+    let exportArray = [];
+    let exPerson = ["Name", "Nights", "Payment"];
+
+    exportArray.push(exPerson);
+
+    personList.forEach(person => {
+
+        exPerson = [
+            person.name,
+            person.nights,
+            '$' + (+person.payment + +person.adjustment)
+        ]
+
+        exportArray.push(exPerson);
+    });
+
+    // console.log(exportArray);
+
+    let csvContent = exportArray.map(e => e.join(",")).join("\n");
+
+    //  TODO make sure this link stays hidden
+    let link = document.createElement('a')
+    link.id = 'download-csv'
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvContent));
+    link.setAttribute('download', 'people.csv');
+    document.body.appendChild(link)
+    document.querySelector('#download-csv').click()
+
+    // console.log(csvContent);
+
+    //  Add a button that can export to JSON, CSV
+
+
+}
+
+
 //  TODO Need a reset table button
-//  TODO Need to implement export to excel, JSON, csv
 //  TODO implement a late addition feature
 //  TODO Validation for letters only with name
 //  TODO Validation with initial inputs
 //  TODO persist data with JSON file
+// TODO see if i can use background colors for buttons. dont forget modal
 
 //  FIXME fix formatting
