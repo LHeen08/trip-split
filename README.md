@@ -21,3 +21,6 @@ Then open the index.html and start adding people to split your trip with!
 ## Export to csv
 After adding people to the table you can easily export to a .csv file. With the download of the .csv file you can then import it into something like Google sheets and share the link so everyone in your group can easily see their payments!
 
+## Screenshot
+
+![Screenshot](screenshot.png?raw=true)
